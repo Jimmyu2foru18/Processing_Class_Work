@@ -1,4 +1,8 @@
-//Flappy Code
+/**
+* @author Jimmy M
+* Programming 2
+* Simple Flappy
+*/
 bird b = new bird();
 pillar[] p = new pillar[3];
 boolean end=false;

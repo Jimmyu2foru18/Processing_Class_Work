@@ -1,0 +1,56 @@
+/**
+* @author Jimmy M
+* Programming 2
+* Box Floating & Changing
+*/
+float x, y, z;
+float xSpeed, ySpeed, zSpeed;
+float boxSize = 30;
+float boundary = 10;
+color boxColor;
+
+void setup() {
+  size(800, 800, P3D);
+  x = width / 2;
+  y = height / 2;
+  z = 0;
+  xSpeed = random(2, 5);
+  ySpeed = random(2, 5);
+  zSpeed = random(2, 5);
+  boxColor = color(random(255), random(255), random(255));
+}
+
+void draw() {
+  background(255);
+  
+  // Define the frame size (3/4th of width and height)
+  float frameWidth = 0.75 * width;
+  float frameHeight = 0.75 * height;
+
+  x += xSpeed;
+  y += ySpeed;
+  z += zSpeed;
+
+  // Bounce when hitting the frame walls
+  if (x - boxSize / 2 < (width - frameWidth) / 2 || x + boxSize / 2 > (width + frameWidth) / 2) {
+    xSpeed = -xSpeed;
+    boxColor = color(random(255), random(255), random(255));
+  }
+  if (y - boxSize / 2 < (height - frameHeight) / 2 || y + boxSize / 2 > (height + frameHeight) / 2) {
+    ySpeed = -ySpeed;
+    boxColor = color(random(255), random(255), random(255));
+  }
+  if (z - boxSize / 2 < boundary - 200 || z + boxSize / 2 > boundary + 200) {
+    zSpeed = -zSpeed;
+    boxColor = color(random(255), random(255), random(255));
+  }
+
+  // Constrain the ball within the frame bounds
+  x = constrain(x, (width - frameWidth) / 2 + boxSize / 2, (width + frameWidth) / 2 - boxSize / 2);
+  y = constrain(y, (height - frameHeight) / 2 + boxSize / 2, (height + frameHeight) / 2 - boxSize / 2);
+  z = constrain(z, boundary - 200 + boxSize / 2, boundary + 200 - boxSize / 2);
+
+  translate(x, y, z);
+  fill(boxColor);
+  box(boxSize);
+}

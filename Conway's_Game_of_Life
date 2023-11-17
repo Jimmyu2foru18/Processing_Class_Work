@@ -1,5 +1,6 @@
- *@author James McGuigan
- *CS 5210 Programming 2
+ * @author James McGuigan
+ * CS 5210 Programming 2
+ * Consways Game of Life
  */
 int numColumns;
 int numRows;

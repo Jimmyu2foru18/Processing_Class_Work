@@ -1,4 +1,8 @@
-
+/**
+* @author Jimmy M
+* Programming 2
+* Arrays_Fun
+*/
 int[] Line;
 int[][] lines; 
 

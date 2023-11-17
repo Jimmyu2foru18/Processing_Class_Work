@@ -1,5 +1,6 @@
 /**
- *@author James McGuigan
+ * @author Jimmy M
+ * Programming 2
  * 50 bouncing balls
  */
 Ball[] balls = new Ball[50];

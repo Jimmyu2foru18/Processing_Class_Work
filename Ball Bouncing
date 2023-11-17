@@ -1,0 +1,30 @@
+float x, y; // Position of the ball
+float xSpeed, ySpeed; // Speed of the ball
+
+void setup() {
+  size(400, 400);
+  x = width / 2;
+  y = height / 2;
+  xSpeed = random(2, 5); // Initial random speed in the x-direction
+  ySpeed = random(2, 5); // Initial random speed in the y-direction
+}
+
+void draw() {
+  background(255);
+
+  // Update ball position
+  x += xSpeed;
+  y += ySpeed;
+
+  // Bounce when hitting the screen boundaries
+  if (x > width || x < 0) {
+    xSpeed = -xSpeed;
+  }
+  if (y > height || y < 0) {
+    ySpeed = -ySpeed;
+  }
+
+  // Draw the ball
+  fill(0, 0, 255);
+  ellipse(x, y, 30, 30);
+}

@@ -1,6 +1,7 @@
 /**
- *@author James McGuigan
- * 50 Invisable balls
+ * @author James McGuigan
+ * Programing 2
+ * 50 Invisible balls
  */
 
 Ball[] balls = new Ball[50];

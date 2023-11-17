@@ -2,22 +2,23 @@
  * CS 5210 Programming 2
  * Consways Game of Life
  */
-int numColumns;
-int numRows;
+
+int XVal;
+int YVal;
 int resolution = 10;
 
 int[][] cells;
 int[][] nextCells;
-
+int frameRateValue = 5;
 
 void setup() {
   size(200, 200);
   calculateCellCounts();
 
-  cells = new int[numColumns][numRows];
-  nextCells = new int[numColumns][numRows];
+  cells = new int[XVal][YVal];
+  nextCells = new int[XVal][YVal];
   initializeCells();
-  frameRate(10);
+  frameRate(60);
 }
 
 void draw() {
@@ -27,24 +28,22 @@ void draw() {
 }
 
 void calculateCellCounts() {
-  // Calculate the number of columns and rows based on resolution
-  numColumns = floor(width / resolution);
-  numRows = floor(height / resolution);
+  XVal = floor(width / resolution);
+  YVal = floor(height / resolution);
 }
 
 void initializeCells() {
-  // Initialize cells with random values
-  for (int i = 0; i < numColumns; i++) {
-    for (int j = 0; j < numRows; j++) {
+
+  for (int i = 0; i < XVal; i++) {
+    for (int j = 0; j < YVal; j++) {
       cells[i][j] = (int) random(2);
     }
   }
 }
 
 void drawCells(int[][] cells) {
-  // Draw cells on the canvas
-  for (int i = 0; i < numColumns; i++) {
-    for (int j = 0; j < numRows; j++) {
+  for (int i = 0; i < XVal; i++) {
+    for (int j = 0; j < YVal; j++) {
       float x = i * resolution;
       float y = j * resolution;
       fill(cells[i][j] * color(255));
@@ -54,53 +53,44 @@ void drawCells(int[][] cells) {
 }
 
 void updateCells() {
-  // Update cells based on Conway's Game of Life rules
-  for (int i = 0; i < numColumns; i++) {
-    for (int j = 0; j < numRows; j++) {
+
+  for (int i = 0; i < XVal; i++) {
+    for (int j = 0; j < YVal; j++) {
       int state = cells[i][j];
       int neighbors = countNeighbors(cells, i, j);
       int nextState = state;
 
       if (state == 0) {
-        // Rule for dead cells
         if (neighbors == 3) {
           nextState = 1;
         }
       } else {
-        // Rule for live cells
         if (neighbors < 2 || neighbors > 3) {
           nextState = 0;
         }
       }
 
-      // Update the next state of the cell
       nextCells[i][j] = nextState;
     }
   }
 
-  // Copy the next state to the current state
-  arrayCopy(nextCells, cells);
+  int[][] temp = cells;
+  cells = nextCells;
+  nextCells = temp;
 }
 
 int countNeighbors(int[][] cells, int x, int y) {
   int sum = 0;
-
-  // Define relative positions of neighbors using x and y offsets
-  int[] xOffset = {-1, -1, -1, 0, 0, 1, 1, 1};
-  int[] yOffset = {-1, 0, 1, -1, 1, -1, 0, 1};
-
-  // Iterate over the neighbors
-  for (int i = 0; i < xOffset.length; i++) {
-    // Calculate neighbor coordinates
-    int neighborX = (x + xOffset[i] + numColumns) % numColumns;
-    int neighborY = (y + yOffset[i] + numRows) % numRows;
-
-    // Add the value of the neighbor cell to the sum
-    sum += cells[neighborX][neighborY];
+  for (int i = -1; i <= 1; i++) {
+    for (int j = -1; j <= 1; j++) {
+      int XPos = (x + i + XVal) % XVal;
+      int YPos = (y + j + YVal) % YVal;
+      sum += cells[XPos][YPos];
+    }
   }
-
-  // Subtract the cell's own state as it was added in the loop
   sum -= cells[x][y];
+  return sum;
+}
 
   return sum;
 }

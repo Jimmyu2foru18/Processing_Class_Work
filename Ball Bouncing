@@ -1,3 +1,9 @@
+/**
+* @author Jimmy M
+* Programming 2
+* Ball Bouncing
+*/
+
 float x, y;
 float xSpeed, ySpeed;
 float radius = 15;

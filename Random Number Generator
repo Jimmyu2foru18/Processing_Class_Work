@@ -1,0 +1,144 @@
+/*@author Jimmy M.
+* Random Number Generator: This program Generates Random numbers 
+* OPEN in Software such as "Processing 4.3" to run code
+* Run Code!
+*/
+Button[] buttons = new Button[10];
+int[] randomNumbers;
+int currentIndex = 0;
+boolean isRandomizing = false;
+int transitionFrames = 2;
+int resultDisplayDuration = 90;
+color resultTextColor;
+float rotAng = 0.0;
+
+void setup() {
+  size(900, 400,P3D);
+  textAlign(CENTER, CENTER);
+  buttons[0] = new Button("Generate 1-10", 50, 250, 150, 40, 1, 10, color(255, 255, 20));
+  buttons[1] = new Button("Generate 1-50", 210, 250, 150, 40, 1, 50, color(180, 20, 20));
+  buttons[2] = new Button("Generate 1-100", 370, 250, 150, 40, 1, 100, color(20, 200, 20));
+  buttons[3] = new Button("Generate 1-150", 530, 250, 150, 40, 1, 150, color(40, 40, 240));
+  buttons[4] = new Button("Generate 1-200", 690, 250, 150, 40, 1, 200, color(40, 200, 245));
+
+  buttons[5] = new Button("Generate 1-250", 50, 320, 150, 40, 1, 250, color(0, 200, 20));
+  buttons[6] = new Button("Generate 1-300", 210, 320, 150, 40, 1, 300, color(199, 199, 255));
+  buttons[7] = new Button("Generate 1-350", 370, 320, 150, 40, 1, 350, color(190, 206, 195));
+  buttons[8] = new Button("Generate 1-400", 530, 320, 150, 40, 1, 400, color(255, 170, 10));
+  buttons[9] = new Button("Generate 1-450", 690, 320, 150, 40, 1, 450, color(1, 105, 192));
+
+}
+
+void draw() {
+  background(color(230, 230, 200));
+  fill(0);
+  textSize(24);
+
+  noFill();
+  stroke(color(30, 20, 70));
+  strokeWeight(3);
+  float boxWidth = 200;
+  float boxHeight = 40;
+  float boxX = width / 2 - boxWidth / 2;
+  float boxY = height / 2 - boxHeight / 2;
+  rect(boxX, boxY, boxWidth, boxHeight, 5);
+
+  if (isRandomizing && currentIndex < randomNumbers.length) {
+    int currentNumber = randomNumbers[currentIndex];
+    int nextNumber = (currentIndex < randomNumbers.length - 1) ? randomNumbers[currentIndex + 1] : currentNumber;
+
+    float transitionAmount = map(frameCount % transitionFrames, 0, transitionFrames, 0, 1);
+    int displayNumber = round(lerp(currentNumber, nextNumber, transitionAmount));
+
+    colorMode(HSB, 360, 100, 100);
+    int brightness = (int) max(map(displayNumber, 50, 50, 50, 50), 50);
+
+    fill(map(displayNumber, 1, 200, 0, 360), 100, brightness);
+    resultTextColor = color(0);
+    textSize(25);
+    fill(resultTextColor);
+    text("Result: " + displayNumber, boxX + boxWidth / 2, boxY + boxHeight / 2);
+    colorMode(RGB, 255);
+
+    if (frameCount % transitionFrames == 0) {
+      currentIndex++;
+    }
+  } else {
+    isRandomizing = false;
+    currentIndex = 0;
+    if (randomNumbers != null && randomNumbers.length > 0) {
+      colorMode(HSB, 360, 100, 100);
+      int brightness = (int) max(map(randomNumbers[randomNumbers.length - 1], 1, 200, 30, 100), 50);
+
+      fill(map(randomNumbers[randomNumbers.length - 1], 1, 200, 0, 360), 100, brightness);
+      resultTextColor = color(0);
+      textSize(30);
+      fill(resultTextColor);
+      text("Result:  " + randomNumbers[randomNumbers.length - 1], boxX + boxWidth / 2, boxY + boxHeight / 2);
+      colorMode(RGB, 255);
+    }
+  }
+
+  pushMatrix();
+  translate(width / 2, height/2 - 110);
+  rotateX(rotAng);
+  rotateY(rotAng);
+  rotateZ(rotAng);
+  rotAng = rotAng + 0.009;
+  fill(130,10,10);
+  box(80);
+  
+  popMatrix();
+
+  for (Button button : buttons) {
+    button.draw();
+  }
+}
+
+void mousePressed() {
+  for (Button button : buttons) {
+    if (button.isMouseOver()) {
+      buttonActionPerformed(button);
+    }
+  }
+}
+
+void buttonActionPerformed(Button button) {
+  isRandomizing = true;
+  int lowerBound = button.lowerBound;
+  int upperBound = button.upperBound;
+  randomNumbers = new int[11];
+  for (int i = 0; i < 10; i++) {
+    randomNumbers[i] = (int) random(lowerBound, upperBound + 1);
+  }
+  randomNumbers[10] = (int) random(lowerBound, upperBound + 1);
+}
+
+class Button {
+  float x, y, w, h;
+  String label;
+  int lowerBound, upperBound, buttonColor;
+
+  Button(String label, float x, float y, float w, float h, int lowerBound, int upperBound, int buttonColor) {
+    this.label = label;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.lowerBound = lowerBound;
+    this.upperBound = upperBound;
+    this.buttonColor = buttonColor;
+  }
+
+  void draw() {
+    fill(buttonColor);
+    rect(x, y, w, h);
+    fill(5);
+    textSize(16);
+    text(label, x + w / 2, y + h / 2);
+  }
+
+  boolean isMouseOver() {
+    return mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h;
+  }
+}
